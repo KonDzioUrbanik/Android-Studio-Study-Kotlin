@@ -21,4 +21,14 @@ Na ten moment aplikacja służy jako **treningowy projekt Android Studio**: nauk
 
 ---
 
-## 🧩 Struktura projektu (planowana)
+## 🧱 Roadmap
+| Etap | Cel | Status |
+|------|------|--------|
+| **M1** | Utworzenie bazy projektu w Kotlin + Compose | ✅ |
+| **M2** | Formularz + ViewModel + walidacja danych | 🔄 |
+| **M3** | Moduł testów psychologicznych (pytania, scoring) | ⏳ |
+| **M4** | Ekran profilu i zapisywanie wyników lokalnie (DataStore / Room) | ⏳ |
+| **M5** | Społeczność i dopasowywanie użytkowników | ⏳ |
+| **M6** | Integracja z backendem (Spring / Firebase) | ⏳ |
+
+---
