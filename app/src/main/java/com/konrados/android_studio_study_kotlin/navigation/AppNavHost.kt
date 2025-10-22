@@ -24,6 +24,7 @@ import androidx.navigation.navArgument
 // ↑ Narzędzie do zdefiniowania argumentów trasy (np. że mamy parametr o nazwie "username").
 
 import androidx.navigation.NavHostController
+import com.konrados.android_studio_study_kotlin.screens.QuestionsScreenView
 // ↑ Pilot do nawigacji. Przez niego mówimy „przejdź na inny ekran”.
 
 import com.konrados.android_studio_study_kotlin.screens.StartScreenView
@@ -41,11 +42,11 @@ fun AppNavHost(nav: NavHostController) {
 
     NavHost(
         navController = nav,            // ← Mówimy, którym pilotem (NavController) steruje ten host
-        startDestination = Routes.LOGIN // ← Który ekran ma się włączyć jako pierwszy po starcie apki
+        startDestination = Routes.STARTSCREEN // ← Który ekran ma się włączyć jako pierwszy po starcie apki
     ) {
         // ↑ Od tego momentu, w tym bloku { ... }, rejestrujemy konkretne ekrany (trasy).
 
-        composable(route = Routes.LOGIN) { // ← Rejestrujemy trasę „login” → co ma się narysować?
+        composable(route = Routes.STARTSCREEN) { // ← Rejestrujemy trasę „login” → co ma się narysować?
             // ↑ Gdy ktoś „wejdzie” na /login, to zawartość TEGO bloku zostanie pokazana.
 
             StartScreenView(
@@ -62,7 +63,7 @@ fun AppNavHost(nav: NavHostController) {
                         //                                      ścieżki „welcome/<tu_login>”.
                         //                                      To podmienia {username} w szablonie.
 
-                        popUpTo(Routes.LOGIN) { inclusive = true }
+                        popUpTo(Routes.STARTSCREEN) { inclusive = true }
                         // ↑ Sprzątanie stosu ekranów:
                         //   „popUpTo(LOGIN)” usuwa wszystkie ekrany aż do „login”,
                         //   a „inclusive = true” usuwa też sam ekran „login”.
@@ -85,6 +86,7 @@ fun AppNavHost(nav: NavHostController) {
                 // ↑ Deklarujemy, że w ścieżce jest parametr o nazwie „username” i że to String.
             )
         ) { backStackEntry ->
+
             // ↑ Ten blok odpala się, gdy nawigacja wejdzie na trasę „welcome/<coś>”.
             //   „backStackEntry” to „plecak” z informacjami o tym wejściu:
             //   zawiera argumenty, które zostały wstrzyknięte w ścieżkę.
@@ -96,11 +98,26 @@ fun AppNavHost(nav: NavHostController) {
             // ↑ Jeśli cokolwiek byłoby null (np. brak argumentu),
             //   to .orEmpty() sprawi, że dostaniemy pusty String zamiast crasha.
 
-            WelcomeScreen(username = user)
-            // ↑ Wreszcie—wołamy nasz Composable ekranu powitalnego i przekazujemy mu login.
-            //   On już tylko ładnie to wyświetli (np. „Witaj, Konrad!”).
+            WelcomeScreen(
+                username = user,
+                onOpenQuestions = {id ->
+                    nav.navigate("questions/$id")
+
+                }
+            )
+
         }
         // ↑ Koniec konfiguracji ekranu WELCOME.
+        composable(
+            route = Routes.QUESTIONS,
+            arguments = listOf(navArgument("conditionId"){ type = NavType.StringType })
+        ){ backStackEntry ->
+            val id = backStackEntry.arguments?.getString("conditionId").orEmpty()
+            // TODO: tu w przyszłości QuestionsScreen(id)
+            QuestionsScreenView()
+        }
+
+
     }
     // ↑ Koniec NavHost: mamy zdefiniowane trasy i zachowania.
 }
